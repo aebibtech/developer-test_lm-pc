@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>136X Gold Miner | Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-soft: rgba(201, 168, 76, 0.12);
+      --bg: #000;
+      --bg-soft: #0a0a0a;
+      --panel: #0d0d0d;
+      --line: #222;
+      --line-strong: #333;
+      --text: #fff;
+      --text-dim: rgba(255, 255, 255, 0.66);
+      --text-muted: #888;
+      --light-section: #f5f5f0;
+      --card-text: #111;
+      --card-muted: #777;
+      --live: #e53e3e;
+      --hero-accent: #0d1f3c;
+      --max-width: 1180px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M 60 0 L 0 0 0 60' fill='none' stroke='rgba(201,168,76,0.04)' stroke-width='1'/%3E%3C/svg%3E");
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(13, 31, 60, 0.2), transparent 38%),
+        linear-gradient(180deg, #020202 0%, var(--bg-soft) 55%, #000 100%);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .top-bar {
+      background: var(--gold);
+      color: #000;
+      text-align: center;
+      padding: 12px 18px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner,
+    .hero-inner,
+    .briefing-inner,
+    .footer-inner {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Syne", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .day-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .day-link {
+      position: relative;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: var(--text-muted);
+      padding: 8px 14px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+    }
+
+    .day-link:hover,
+    .day-link:focus-visible {
+      color: var(--text);
+      border-color: rgba(201, 168, 76, 0.35);
+      background: rgba(255, 255, 255, 0.03);
+      outline: none;
+    }
+
+    .day-link.active {
+      color: var(--text);
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.08);
+    }
+
+    .day-link.live {
+      padding-right: 44px;
+    }
+
+    .live-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      border-radius: 999px;
+      background: var(--live);
+      color: #fff;
+      padding: 3px 6px;
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 88px 0 72px;
+      background: radial-gradient(circle at top, rgba(13, 31, 60, 0.95) 0%, rgba(13, 31, 60, 0.45) 20%, #000 68%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--texture);
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto auto -180px 50%;
+      width: 520px;
+      height: 520px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.14) 0%, rgba(201, 168, 76, 0) 72%);
+      filter: blur(12px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 32px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .eyebrow,
+    .sub-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .sub-eyebrow {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      margin-top: -18px;
+    }
+
+    h1 {
+      font-family: "Syne", sans-serif;
+      font-size: clamp(2.75rem, 8vw, 5.5rem);
+      font-weight: 800;
+      line-height: 0.96;
+      max-width: 12ch;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    .quote {
+      display: block;
+      color: var(--gold);
+      font-style: italic;
+      font-size: 1.08em;
+    }
+
+    .hero-copy {
+      max-width: 640px;
+      color: var(--text-dim);
+      font-size: 1.02rem;
+      line-height: 1.75;
+    }
+
+    .stats-row {
+      width: min(100%, 780px);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(8, 8, 8, 0.65);
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      padding: 18px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .stat:last-child {
+      border-right: 0;
+    }
+
+    .stat-value {
+      font-family: "Syne", sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      margin-top: 8px;
+      color: #737373;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+    }
+
+    .countdown-wrap {
+      display: grid;
+      gap: 16px;
+    }
+
+    .countdown-label {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .countdown {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .countdown-unit {
+      min-width: 84px;
+      padding: 16px 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: rgba(13, 13, 13, 0.88);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .countdown-value {
+      font-family: "Syne", sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .countdown-unit-label {
+      margin-top: 6px;
+      color: #5f5f5f;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .countdown-separator {
+      font-family: "Syne", sans-serif;
+      font-size: 2rem;
+      color: var(--gold);
+      line-height: 1;
+      align-self: center;
+      padding-top: 2px;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 14px 24px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .button-primary {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .button-secondary {
+      border-color: #444;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+    }
+
+    .briefing {
+      background: var(--light-section);
+      color: var(--card-text);
+      padding: 72px 0;
+    }
+
+    .briefing-inner {
+      display: grid;
+      gap: 34px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: #2a2a2a;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .section-title::before,
+    .section-title::after {
+      content: "\2014\2014";
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      min-height: 100%;
+      padding: 26px 24px 28px;
+      border-top: 3px solid transparent;
+      border-radius: 2px;
+      background: #fff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .card--featured {
+      background: linear-gradient(180deg, #1a1400 0%, #110d02 100%);
+      border-top-color: var(--gold);
+    }
+
+    .card-badge,
+    .card-tag {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .card-badge {
+      justify-self: start;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--live);
+      color: #fff;
+    }
+
+    .card-tag {
+      color: var(--gold);
+    }
+
+    .card-date {
+      font-size: 0.74rem;
+      color: #999;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--card-text);
+    }
+
+    .card--featured h2 {
+      color: #fff;
+    }
+
+    .card-link {
+      margin-top: 8px;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    footer {
+      background: #000;
+      border-top: 1px solid #111;
+      padding: 34px 0 46px;
+    }
+
+    .footer-inner {
+      text-align: center;
+      display: grid;
+      gap: 12px;
+      color: #4c4c4c;
+      font-size: 0.74rem;
+      line-height: 1.8;
+    }
+
+    .footer-brand {
+      color: var(--gold);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 960px) {
+      .stats-row,
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat:nth-child(2) {
+        border-right: 0;
+      }
+
+      .stat:nth-child(-n + 2) {
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .top-bar {
+        font-size: 0.72rem;
+        padding: 10px 14px;
+      }
+
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .day-links {
+        justify-content: flex-start;
+      }
+
+      .hero {
+        padding: 64px 0 56px;
+      }
+
+      .sub-eyebrow {
+        margin-top: -8px;
+      }
+
+      .countdown {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+
+      .countdown-separator {
+        display: none;
+      }
+
+      .countdown-unit {
+        width: min(100%, 220px);
+      }
+
+      .cta-group,
+      .cards,
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-group {
+        display: grid;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .stats-row {
+        display: grid;
+      }
+
+      .stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stat:last-child {
+        border-bottom: 0;
+      }
+
+      .briefing {
+        padding: 56px 0;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .nav-inner,
+      .hero-inner,
+      .briefing-inner,
+      .footer-inner {
+        width: min(calc(100% - 24px), var(--max-width));
+      }
+
+      .day-links {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .day-link {
+        width: 100%;
+        text-align: center;
+      }
+
+      .day-link.live {
+        padding-right: 14px;
+      }
+
+      .live-badge {
+        top: -8px;
+        right: 10px;
+      }
+
+      .countdown-unit {
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">Get in before June 1st, 2026. Pre-IPO shares are filling fast.</div>
+
+  <header class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="Test_3_index.html">136X Gold Miner</a>
+      <nav class="day-links" aria-label="Event days">
+        <a class="day-link active" href="Test_3_day1.html">Day 1</a>
+        <a class="day-link" href="day2.html">Day 2</a>
+        <a class="day-link" href="day3.html">Day 3</a>
+        <a class="day-link live" href="day4.html">Day 4 <span class="live-badge">LIVE</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Exclusive Research Event · 4-Day Series</p>
+        <p class="sub-eyebrow">A Kiyosaki Research Event</p>
+        <h1>
+          Claim Pre-IPO Shares
+          <br>of This Tiny
+          <span class="quote">&ldquo;136X Gold Miner&rdquo;</span>
+        </h1>
+        <p class="hero-copy">A tiny company has discovered how to extract gold from the waste stream of the AI revolution at 136 times the yield of traditional mining. This private briefing breaks down why the deadline matters and what opens next across the four-day event.</p>
+
+        <div class="stats-row" aria-label="Series highlights">
+          <div class="stat">
+            <div class="stat-value">$4,777</div>
+            <div class="stat-label">Gold Spot Price</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">136X</div>
+            <div class="stat-label">Yield vs. Traditional</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">Pre-IPO</div>
+            <div class="stat-label">Before Public</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">Jun 1</div>
+            <div class="stat-label">Deadline</div>
+          </div>
+        </div>
+
+        <div class="countdown-wrap" aria-label="Countdown to June 1, 2026">
+          <p class="countdown-label">Presentation Goes Live</p>
+          <div class="countdown">
+            <div class="countdown-unit">
+              <div class="countdown-value" id="days">00</div>
+              <div class="countdown-unit-label">Days</div>
+            </div>
+            <div class="countdown-separator" aria-hidden="true">:</div>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="hours">00</div>
+              <div class="countdown-unit-label">Hrs</div>
+            </div>
+            <div class="countdown-separator" aria-hidden="true">:</div>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="minutes">00</div>
+              <div class="countdown-unit-label">Min</div>
+            </div>
+            <div class="countdown-separator" aria-hidden="true">:</div>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="seconds">00</div>
+              <div class="countdown-unit-label">Sec</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-group">
+          <a class="button button-primary" href="day4.html">Start With Day 4</a>
+          <a class="button button-secondary" href="Test_3_day1.html">Begin From Day 1</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="briefing">
+      <div class="briefing-inner">
+        <h2 class="section-title">Your 4-Day Briefing</h2>
+        <div class="cards">
+          <article class="card">
+            <div class="card-tag">Day 1</div>
+            <div class="card-date">April 15, 2026</div>
+            <h2>The Greatest Gold Bull Market of Our Lifetime Is Just Getting Started</h2>
+            <a class="card-link" href="Test_3_day1.html">Read Now</a>
+          </article>
+          <article class="card">
+            <div class="card-tag">Day 2</div>
+            <div class="card-date">April 16, 2026</div>
+            <h2>136X. The Number That Makes Every Traditional Gold Miner Obsolete.</h2>
+            <a class="card-link" href="day2.html">Read Now</a>
+          </article>
+          <article class="card">
+            <div class="card-tag">Day 3</div>
+            <div class="card-date">April 17, 2026</div>
+            <h2>Why I&rsquo;m Putting My Name Behind This Before the Crowd Arrives.</h2>
+            <a class="card-link" href="day3.html">Read Now</a>
+          </article>
+          <article class="card card--featured">
+            <div class="card-badge">Funding Open</div>
+            <div class="card-tag">Day 4</div>
+            <div class="card-date">April 18, 2026</div>
+            <h2>The Door Is Open. Full Reveal and Pre-IPO Access.</h2>
+            <a class="card-link" href="day4.html">Watch &amp; Invest</a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">136X Gold Miner · A Kiyosaki Research Event</div>
+      <p>A publication of Kiyosaki Research. The information provided is for educational purposes only and should not be construed as investment advice.</p>
+      <p>All investments are speculative and illiquid. Consult a qualified financial advisor before making any investment decisions.</p>
+      <p>&copy; 2026 Kiyosaki Research. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const targetTime = new Date("2026-06-01T00:00:00").getTime();
+      const parts = {
+        days: document.getElementById("days"),
+        hours: document.getElementById("hours"),
+        minutes: document.getElementById("minutes"),
+        seconds: document.getElementById("seconds")
+      };
+
+      function pad(value) {
+        return String(value).padStart(2, "0");
+      }
+
+      function updateCountdown() {
+        const now = Date.now();
+        const remaining = Math.max(0, targetTime - now);
+        const days = Math.floor(remaining / 86400000);
+        const hours = Math.floor((remaining % 86400000) / 3600000);
+        const minutes = Math.floor((remaining % 3600000) / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+
+        parts.days.textContent = pad(days);
+        parts.hours.textContent = pad(hours);
+        parts.minutes.textContent = pad(minutes);
+        parts.seconds.textContent = pad(seconds);
+      }
+
+      updateCountdown();
+      window.setInterval(updateCountdown, 1000);
+    }());
+  </script>
+</body>
+</html>

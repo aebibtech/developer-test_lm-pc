@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>136X Gold Miner | Day 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-soft: rgba(201, 168, 76, 0.12);
+      --bg: #000;
+      --bg-soft: #0a0a0a;
+      --panel: #0d0d0d;
+      --line: #222;
+      --line-strong: #333;
+      --text: #fff;
+      --text-dim: rgba(255, 255, 255, 0.66);
+      --text-muted: #888;
+      --live: #e53e3e;
+      --hero-accent: #0d1f3c;
+      --paper: #fff;
+      --body-text: #444;
+      --max-width: 1180px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M 60 0 L 0 0 0 60' fill='none' stroke='rgba(201,168,76,0.04)' stroke-width='1'/%3E%3C/svg%3E");
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(13, 31, 60, 0.18), transparent 38%),
+        linear-gradient(180deg, #020202 0%, var(--bg-soft) 55%, #000 100%);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner,
+    .hero-inner,
+    .video-shell,
+    .reveal-shell,
+    .article,
+    .day-nav-inner {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Syne", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .day-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .day-link {
+      position: relative;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: var(--text-muted);
+      padding: 8px 14px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+    }
+
+    .day-link:hover,
+    .day-link:focus-visible,
+    .day-nav-link:hover,
+    .day-nav-link:focus-visible {
+      color: var(--text);
+      outline: none;
+    }
+
+    .day-link.active {
+      color: var(--text);
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.08);
+    }
+
+    .day-link.live {
+      padding-right: 44px;
+    }
+
+    .live-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      border-radius: 999px;
+      background: var(--live);
+      color: #fff;
+      padding: 3px 6px;
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+
+    .day-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 64px 0 48px;
+      background: radial-gradient(circle at top, rgba(13, 31, 60, 0.95) 0%, rgba(13, 31, 60, 0.45) 22%, #000 68%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .day-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--texture);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 24px;
+      text-align: center;
+      justify-items: center;
+    }
+
+    .day-label {
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-family: "Syne", sans-serif;
+      font-size: clamp(2.4rem, 7vw, 4.8rem);
+      font-weight: 800;
+      line-height: 0.98;
+      max-width: 11ch;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    .gold {
+      color: var(--gold);
+    }
+
+    .stats-row {
+      width: min(100%, 660px);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(8, 8, 8, 0.65);
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      padding: 18px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .stat:last-child {
+      border-right: 0;
+    }
+
+    .stat-value {
+      font-family: "Syne", sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      margin-top: 8px;
+      color: #737373;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+    }
+
+    .video-section {
+      background: #000;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .video-shell {
+      padding: 0;
+    }
+
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #050505;
+      overflow: hidden;
+    }
+
+    .video-frame iframe,
+    .video-frame #player {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .video-caption {
+      position: absolute;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.56);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      color: #a8a8a8;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      pointer-events: none;
+      backdrop-filter: blur(4px);
+    }
+
+    .reveal-shell {
+      padding: 28px 0 0;
+    }
+
+    .reveal-box {
+      display: none;
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.12), rgba(201, 168, 76, 0.05));
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      border-radius: 6px;
+      padding: 28px 30px;
+      text-align: center;
+    }
+
+    .reveal-box.visible {
+      display: block;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .reveal-box h2 {
+      font-family: "Syne", sans-serif;
+      color: var(--gold);
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .reveal-box p {
+      color: #b9b9b9;
+      font-size: 0.94rem;
+      line-height: 1.7;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .article-wrap {
+      background: var(--paper);
+      color: #111;
+      margin-top: 40px;
+    }
+
+    .article {
+      max-width: 960px;
+      padding: 64px 0;
+    }
+
+    .byline {
+      display: inline-block;
+      margin-bottom: 28px;
+      padding: 4px 10px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .article h2 {
+      font-family: "Syne", sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 22px;
+      color: #111;
+      max-width: 18ch;
+      text-wrap: balance;
+    }
+
+    .article p {
+      color: var(--body-text);
+      font-size: 1rem;
+      line-height: 1.9;
+      margin-bottom: 18px;
+      max-width: 72ch;
+    }
+
+    .section-head {
+      margin: 38px 0 14px;
+      color: var(--gold);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .callout {
+      margin: 36px 0;
+      padding: 22px 24px;
+      border-left: 4px solid var(--gold);
+      background: #1a1400;
+    }
+
+    .callout-number {
+      font-family: "Syne", sans-serif;
+      font-size: clamp(3rem, 10vw, 4rem);
+      font-weight: 800;
+      line-height: 1;
+      color: var(--gold);
+    }
+
+    .callout-emphasis {
+      margin: 8px 0 4px;
+      color: var(--gold);
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .callout-copy {
+      color: #9a9a9a;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .signoff {
+      color: #8a8a8a;
+      font-size: 0.94rem;
+    }
+
+    .day-nav {
+      background: #000;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .day-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 0 36px;
+    }
+
+    .day-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .day-nav-link span {
+      color: var(--gold);
+    }
+
+    @media (max-width: 900px) {
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stat:last-child {
+        border-bottom: 0;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .day-links {
+        justify-content: flex-start;
+      }
+
+      .day-hero {
+        padding: 52px 0 40px;
+      }
+
+      .article {
+        padding: 48px 0;
+      }
+
+      .day-nav-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .nav-inner,
+      .hero-inner,
+      .video-shell,
+      .reveal-shell,
+      .article,
+      .day-nav-inner {
+        width: min(calc(100% - 24px), var(--max-width));
+      }
+
+      .day-links {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .day-link {
+        width: 100%;
+        text-align: center;
+      }
+
+      .day-link.live {
+        padding-right: 14px;
+      }
+
+      .live-badge {
+        top: -8px;
+        right: 10px;
+      }
+
+      .reveal-box {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="Test_3_index.html">136X Gold Miner</a>
+      <nav class="day-links" aria-label="Event days">
+        <a class="day-link active" href="Test_3_day1.html">Day 1</a>
+        <a class="day-link" href="day2.html">Day 2</a>
+        <a class="day-link" href="day3.html">Day 3</a>
+        <a class="day-link live" href="day4.html">Day 4 <span class="live-badge">LIVE</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="day-hero">
+      <div class="hero-inner">
+        <p class="day-label">Day 1 of 4 · April 15, 2026</p>
+        <h1>The <span class="gold">Greatest</span><br>Gold Bull Market<br>of Our Lifetime Is<br>Just Getting Started</h1>
+        <div class="stats-row" aria-label="Day 1 highlights">
+          <div class="stat">
+            <div class="stat-value">$4,777</div>
+            <div class="stat-label">Gold Spot Price</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">1,000+</div>
+            <div class="stat-label">Metric Tons Bought</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">136</div>
+            <div class="stat-label">The Number That Changes Everything</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="video-section" aria-labelledby="video-title">
+      <div class="video-shell">
+        <div class="video-frame">
+          <div id="player" aria-label="Day 1 video"></div>
+          <div class="video-caption" id="video-title">YouTube embed · IFrame Player API</div>
+        </div>
+      </div>
+      <div class="reveal-shell">
+        <div class="reveal-box" id="reveal-box" aria-live="polite">
+          <h2>You&rsquo;ve unlocked Day 2</h2>
+          <p>Thanks for watching. Day 2 is now available and ready to reveal the number that makes every traditional gold miner obsolete.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="article-wrap">
+      <article class="article">
+        <span class="byline">By Robert Kiyosaki · Chapter 1 of 4</span>
+        <h2>Why I Believe Gold Is Headed to Prices Most People Think Are Impossible</h2>
+        <p>I&rsquo;ve been called crazy for my gold predictions before. In 2002 I told people gold would hit $1,000 an ounce while it was trading at $300. People laughed. They also laughed when I said the global monetary experiment would eventually drive smart capital back toward hard assets that can&rsquo;t be printed on command.</p>
+        <p>That disbelief is exactly why moments like this matter. When consensus is still anchored to yesterday&rsquo;s assumptions, the people paying close attention to the setup can move before the narrative catches up. Gold is not just reacting to fear right now. It is responding to structural demand that is accelerating behind the scenes.</p>
+
+        <div class="section-head">The Setup</div>
+        <p>Gold climbed 65% in 2025. That kind of move is not a normal market fluctuation. It is a signal. Gold mining stocks did even better, nearly doubling over the same period, while governments and institutions quietly kept building positions. Moves like that tend to happen when a much larger repricing cycle is beginning.</p>
+
+        <div class="section-head">Why Now</div>
+        <p>Central banks purchased more gold in the last three years than at any point since the U.S. left the gold standard in 1971. China. India. Russia. Turkey. Dozens of smaller nations. All of them are adding to reserves at a pace that tells you the world is preparing for a very different monetary environment.</p>
+        <p>What most individual investors still miss is that this demand is colliding with a supply chain that has not been built for speed. Traditional miners need time, capital, permits, and luck. When real scarcity meets accelerating demand, price targets that once looked absurd begin to feel conservative.</p>
+
+        <div class="section-head">What I&rsquo;m About to Share With You</div>
+        <p>I started the Venture Network because more private deals cross my desk than I could possibly manage myself. Most people only hear about opportunities after Wall Street has finished taking the best seats at the table. That is not how I operate when I see a window forming ahead of the crowd.</p>
+        <p>Tomorrow, I&rsquo;m going to introduce you to a number. It is simple, specific, and impossible to forget once you understand what it means. That number is tied to a tiny company pursuing a radically different way to access gold yield at a time when the world is desperate for new supply.</p>
+
+        <div class="callout">
+          <div class="callout-number">136</div>
+          <div class="callout-emphasis">Remember it.</div>
+          <p class="callout-copy">Because when I explain what it means, you&rsquo;re going to understand why I&rsquo;m putting my name behind this opportunity with full conviction before the public market even gets a look.</p>
+        </div>
+
+        <p class="signoff">See you tomorrow. — Robert Kiyosaki</p>
+      </article>
+    </section>
+  </main>
+
+  <nav class="day-nav" aria-label="Article pagination">
+    <div class="day-nav-inner">
+      <a class="day-nav-link" href="Test_3_index.html"><span>&larr;</span> Home</a>
+      <a class="day-nav-link" href="day2.html">Day 2 <span>&rarr;</span></a>
+    </div>
+  </nav>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player;
+    let revealShown = false;
+    let watchSeconds = 0;
+    let watchInterval = null;
+
+    function showReveal() {
+      if (revealShown) {
+        return;
+      }
+
+      revealShown = true;
+      document.getElementById("reveal-box").classList.add("visible");
+    }
+
+    function stopWatching() {
+      if (watchInterval !== null) {
+        window.clearInterval(watchInterval);
+        watchInterval = null;
+      }
+    }
+
+    function startWatching() {
+      if (watchInterval !== null || revealShown) {
+        return;
+      }
+
+      watchInterval = window.setInterval(function () {
+        if (!player || typeof player.getPlayerState !== "function") {
+          return;
+        }
+
+        if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
+          return;
+        }
+
+        watchSeconds += 0.25;
+
+        if (watchSeconds >= 10) {
+          stopWatching();
+          showReveal();
+        }
+      }, 250);
+    }
+
+    function onPlayerStateChange(event) {
+      switch (event.data) {
+        case YT.PlayerState.PLAYING:
+          startWatching();
+          break;
+        case YT.PlayerState.PAUSED:
+        case YT.PlayerState.BUFFERING:
+        case YT.PlayerState.ENDED:
+        case YT.PlayerState.CUED:
+          stopWatching();
+          break;
+        default:
+          break;
+      }
+    }
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("player", {
+        videoId: "dQw4w9WgXcQ",
+        playerVars: {
+          rel: 0,
+          modestbranding: 1
+        },
+        events: {
+          onStateChange: onPlayerStateChange
+        }
+      });
+    }
+
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+    window.addEventListener("beforeunload", stopWatching);
+  </script>
+</body>
+</html>
