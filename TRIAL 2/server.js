@@ -13,6 +13,7 @@ const path = require('path');
 
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 const DB_FILE = path.join(__dirname, 'tasks.json');
 
@@ -28,48 +29,57 @@ function saveTasks(tasks) {
 
 // GET /tasks
 // Returns all tasks. Supports optional status filter.
+// Edge case: if status query is provided but empty, return all tasks (no filter).
 app.get('/tasks', (req, res) => {
   const tasks = loadTasks();
   const { status } = req.query;
-  if (status) {
+  if (status && status.trim() !== '') {
     const filtered = tasks.filter(t => t.status === status);
-    return res.json({ success: true, tasks: filtered });
+    return res.json(filtered);
   }
-  res.json({ success: true, tasks });
+  res.json(tasks);
 });
 
 // POST /tasks
 app.post('/tasks', (req, res) => {
   const { title, status } = req.body;
+  if (!title || title.trim() === '') {
+    return res.status(400).json({ success: false, message: 'Title is required' });
+  }
   const tasks = loadTasks();
   const newTask = {
     id: Date.now(),
-    title: title,
-    status: status,
+    title: title.trim(),
+    status: status || 'pending',
   };
   tasks.push(newTask);
   saveTasks(tasks);
-  res.json({ success: true, task: newTask });
+  res.status(201).json(newTask);
 });
 
 // PATCH /tasks/:id
 app.patch('/tasks/:id', (req, res) => {
   const tasks = loadTasks();
   const { status } = req.body;
-  const task = tasks.find(t => t.id === req.params.id);
+  const id = parseInt(req.params.id, 10);
+  const task = tasks.find(t => t.id === id);
   if (!task) {
     return res.status(404).json({ success: false, message: 'Task not found' });
   }
   task.status = status;
   saveTasks(tasks);
-  res.json({ success: true, task });
+  res.json(task);
 });
 
 // DELETE /tasks/:id
 app.delete('/tasks/:id', (req, res) => {
-  let tasks = loadTasks();
-  const index = tasks.findIndex(t => t.id === req.params.id);
-  tasks = tasks.splice(index, 1);
+  const tasks = loadTasks();
+  const id = parseInt(req.params.id, 10);
+  const index = tasks.findIndex(t => t.id === id);
+  if (index === -1) {
+    return res.status(404).json({ success: false, message: 'Task not found' });
+  }
+  tasks.splice(index, 1);
   saveTasks(tasks);
   res.json({ success: true, message: 'Task deleted' });
 });
