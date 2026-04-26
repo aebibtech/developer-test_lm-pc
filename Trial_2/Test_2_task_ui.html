@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <div>
+        <input type="text" id="new-task-title" placeholder="New task title">
+        <button onclick="addTask()">Add Task</button>
+    </div>
+    <ul id="task-list"></ul>
+
+    <script>
+        const API_BASE = '';
+
+        async function loadTasks() {
+            const response = await fetch(`${API_BASE}/tasks`);
+            const tasks = await response.json();
+            renderTasks(tasks);
+        }
+
+        function renderTasks(tasks) {
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = `${task.title} - ${task.status}`;
+                if (task.status !== 'done') {
+                    const doneBtn = document.createElement('button');
+                    doneBtn.textContent = 'Mark Done';
+                    doneBtn.onclick = () => markDone(task.id);
+                    li.appendChild(doneBtn);
+                }
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => deleteTask(task.id);
+                li.appendChild(deleteBtn);
+                list.appendChild(li);
+            });
+        }
+
+        async function addTask() {
+            const title = document.getElementById('new-task-title').value.trim();
+            if (!title) return;
+            const response = await fetch(`${API_BASE}/tasks`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title })
+            });
+            if (response.ok) {
+                document.getElementById('new-task-title').value = '';
+                loadTasks();
+            }
+        }
+
+        async function markDone(id) {
+            await fetch(`${API_BASE}/tasks/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'done' })
+            });
+            loadTasks();
+        }
+
+        async function deleteTask(id) {
+            await fetch(`${API_BASE}/tasks/${id}`, { method: 'DELETE' });
+            loadTasks();
+        }
+
+        loadTasks();
+    </script>
+</body>
+</html>
